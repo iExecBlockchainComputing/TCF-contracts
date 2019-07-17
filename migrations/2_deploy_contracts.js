@@ -1,5 +1,5 @@
-var WorkerRegistryImplementation     = artifacts.require("WorkerRegistryImplementation");
-var WorkerRegistryListImplementation = artifacts.require("WorkerRegistryListImplementation");
+var WorkerRegistry     = artifacts.require("WorkerRegistry");
+var WorkerRegistryList = artifacts.require("WorkerRegistryList");
 
 module.exports = async function(deployer, network, accounts)
 {
@@ -9,12 +9,12 @@ module.exports = async function(deployer, network, accounts)
 	console.log("Chainid is:", chainid);
 	console.log("Chaintype is:", chaintype);
 
-	await deployer.deploy(WorkerRegistryImplementation);
-	const WorkerRegistryInstance = await WorkerRegistryImplementation.deployed();
+	await deployer.deploy(WorkerRegistry);
+	const WorkerRegistryInstance = await WorkerRegistry.deployed();
 	console.log("WorkerRegistryInstance deployed at address: " + WorkerRegistryInstance.address);
 
-	await deployer.deploy(WorkerRegistryListImplementation);
-	const WorkerRegistryListInstance = await WorkerRegistryListImplementation.deployed();
+	await deployer.deploy(WorkerRegistryList);
+	const WorkerRegistryListInstance = await WorkerRegistryList.deployed();
 	console.log("WorkerRegistryListInstance deployed at address: " + WorkerRegistryListInstance.address);
 
 };
