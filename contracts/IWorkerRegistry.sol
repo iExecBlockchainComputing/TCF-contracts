@@ -5,7 +5,7 @@ interface IWorkerRegistry
 	function workerRegister(
 		bytes32            workerID
 	, uint8              workerType
-	, bytes32            organizationID
+	, bytes32            organizationId
 	, bytes32[] calldata applicationTypeId
 	, string    calldata details
 	) external;
