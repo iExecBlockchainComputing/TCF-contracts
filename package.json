@@ -3,6 +3,8 @@
     "openzeppelin-solidity": "^2.3.0"
   },
   "devDependencies": {
-    "truffle": "^5.0.27"
+    "ganache-cli": "^6.5.0",
+    "truffle": "^5.0.28",
+    "truffle-hdwallet-provider": "^1.0.14"
   }
 }
