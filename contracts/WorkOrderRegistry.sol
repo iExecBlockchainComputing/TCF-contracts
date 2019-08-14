@@ -4,16 +4,20 @@ import "./libs/SignatureVerifier.sol";
 
 contract WorkOrderRegistry is SignatureVerifier
 {
+	uint256 constant public TIMEOUT = 1 days;
+
 	enum WorkOrderStatus
 	{
 		NULL,
 		ACTIVE,
-		COMPLETED
+		COMPLETED,
+		FAILED
 	}
 
 	struct WorkOrder
 	{
 		uint256 status;
+		uint256 timestamp;
 		bytes32 workerID;
 		bytes32 requesterID;
 		string  request;
@@ -33,6 +37,9 @@ contract WorkOrderRegistry is SignatureVerifier
 	event workOrderCompleted(
 		bytes32 indexed workOrderID,
 		uint256 indexed workOrderReturnCode);
+
+	event workOrderTimedout(
+		bytes32 indexed workOrderID);
 
 	constructor()
 	public
@@ -58,6 +65,7 @@ contract WorkOrderRegistry is SignatureVerifier
 		WorkOrder storage wo = m_workorders[workOrderID];
 		require(wo.status == uint256(WorkOrderStatus.NULL), "wo-already-submitted");
 		wo.status      = uint256(WorkOrderStatus.ACTIVE);
+		wo.timestamp   = now;
 		wo.workerID    = _workerID;
 		wo.requesterID = _requesterID;
 		wo.request     = _workOrderRequest;
@@ -105,10 +113,27 @@ contract WorkOrderRegistry is SignatureVerifier
 		return 0;
 	}
 
+	function workOrderTimeout(
+		bytes32 _workOrderID
+	) public returns (
+		uint256 errorCode
+	) {
+		WorkOrder storage wo = m_workorders[_workOrderID];
+		require(wo.status == uint256(WorkOrderStatus.ACTIVE));
+		require(wo.timestamp + TIMEOUT < now);
+
+		wo.status = uint256(WorkOrderStatus.FAILED);
+
+		emit workOrderTimedout(_workOrderID);
+
+		return 0;
+	}
+
 	function workOrderGet(
 		bytes32       _workOrderID
 	) public view returns (
 		uint256       status,
+		uint256       timestamp,
 		bytes32       workerID,
 		bytes32       requesterID,
 		string memory request,
@@ -116,14 +141,16 @@ contract WorkOrderRegistry is SignatureVerifier
 		uint256       returnCode,
 		string memory response)
 	{
+		WorkOrder storage wo = m_workorders[_workOrderID];
 		return (
-			m_workorders[_workOrderID].status,
-			m_workorders[_workOrderID].workerID,
-			m_workorders[_workOrderID].requesterID,
-			m_workorders[_workOrderID].request,
-			m_workorders[_workOrderID].verifier,
-			m_workorders[_workOrderID].returnCode,
-			m_workorders[_workOrderID].response);
+			wo.status,
+			wo.timestamp,
+			wo.workerID,
+			wo.requesterID,
+			wo.request,
+			wo.verifier,
+			wo.returnCode,
+			wo.response);
 	}
 
 }
