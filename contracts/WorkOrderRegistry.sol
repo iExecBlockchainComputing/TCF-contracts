@@ -23,7 +23,7 @@ contract WorkOrderRegistry is SignatureVerifier
 		string  request;
 		address verifier;
 		uint256 returnCode;
-		string  response;
+		bytes   response;
 	}
 
 	// workOrderID → workOrder
@@ -80,12 +80,12 @@ contract WorkOrderRegistry is SignatureVerifier
 	}
 
 	function workOrderComplete(
-		bytes32       _workOrderID,
-		uint256       _workOrderReturnCode,
-		string memory _workOrderResponse,
-		bytes  memory _workOrderSignature
+		bytes32      _workOrderID,
+		uint256      _workOrderReturnCode,
+		bytes memory _workOrderResponse,
+		bytes memory _workOrderSignature
 	) public returns (
-		uint256       errorCode
+		uint256      errorCode
 	) {
 		WorkOrder storage wo = m_workorders[_workOrderID];
 		require(wo.status == uint256(WorkOrderStatus.ACTIVE), "wo-already-submitted");
@@ -139,7 +139,7 @@ contract WorkOrderRegistry is SignatureVerifier
 		string memory request,
 		address       verifier,
 		uint256       returnCode,
-		string memory response)
+		bytes  memory response)
 	{
 		WorkOrder storage wo = m_workorders[_workOrderID];
 		return (
