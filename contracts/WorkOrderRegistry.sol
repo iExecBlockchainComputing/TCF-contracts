@@ -20,7 +20,7 @@ contract WorkOrderRegistry is SignatureVerifier
 		uint256 timestamp;
 		bytes32 workerID;
 		bytes32 requesterID;
-		string  request;
+		bytes   request;
 		address verifier;
 		uint256 returnCode;
 		bytes   response;
@@ -46,13 +46,13 @@ contract WorkOrderRegistry is SignatureVerifier
 	{}
 
 	function workOrderSubmit(
-		bytes32        _workerID,
-		bytes32        _requesterID,
-		string  memory _workOrderRequest,
-		address        _verifier,
-		bytes32        _salt)
+		bytes32       _workerID,
+		bytes32       _requesterID,
+		bytes memory _workOrderRequest,
+		address       _verifier,
+		bytes32       _salt)
 	public returns (
-		uint256        errorCode
+		uint256       errorCode
 	) {
 		bytes32 workOrderID = keccak256(abi.encode(
 			_workerID,
@@ -130,16 +130,16 @@ contract WorkOrderRegistry is SignatureVerifier
 	}
 
 	function workOrderGet(
-		bytes32       _workOrderID
+		bytes32      _workOrderID
 	) public view returns (
-		uint256       status,
-		uint256       timestamp,
-		bytes32       workerID,
-		bytes32       requesterID,
-		string memory request,
-		address       verifier,
-		uint256       returnCode,
-		bytes  memory response)
+		uint256      status,
+		uint256      timestamp,
+		bytes32      workerID,
+		bytes32      requesterID,
+		bytes memory request,
+		address      verifier,
+		uint256      returnCode,
+		bytes memory response)
 	{
 		WorkOrder storage wo = m_workorders[_workOrderID];
 		return (
