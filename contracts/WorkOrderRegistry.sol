@@ -139,8 +139,8 @@ contract WorkOrderRegistry is SignatureVerifier
 		bytes memory request,
 		address      verifier,
 		uint256      returnCode,
-		bytes memory response)
-	{
+		bytes memory response
+	) {
 		WorkOrder storage wo = m_workorders[_workOrderID];
 		return (
 			wo.status,

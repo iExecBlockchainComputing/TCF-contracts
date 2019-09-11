@@ -86,24 +86,24 @@ contract WorkerRegistry
 		bytes32          appTypeId
 	) public view returns(
 		uint256          totalCount,
-		string    memory lookupTag,
+		uint256          lookupTag,
 		bytes32[] memory ids
 	) {
-		return workerLookUpNext(workerType, organizationId, appTypeId, "");
+		return workerLookUpNext(workerType, organizationId, appTypeId, 0);
 	}
 
 	function workerLookUpNext(
 		uint256          workerType,
 		bytes32          organizationId,
 		bytes32          appTypeId,
-		string    memory /*lookUpTag*/
+		uint256          /*lookUpTag*/
 	) public view returns(
 		uint256          totalCount,
-		string    memory newLookupTag,
+		uint256          newLookupTag,
 		bytes32[] memory ids
 	) {
 		bytes32[] storage matchs = m_workersDB[workerType][organizationId][appTypeId];
-		return (matchs.length, "", matchs);
+		return (matchs.length, 0, matchs);
 	}
 
 	function workerRetrieve(
